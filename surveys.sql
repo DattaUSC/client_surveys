@@ -1,7 +1,8 @@
 create table client (
   id bigint not null primary key,
   phone decimal(10) unique,
-  email varchar(50) unique);
+  email varchar(50) unique,
+  name varchar(50));
 
 create table industry (
   id int not null auto_increment primary key,
