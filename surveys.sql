@@ -7,7 +7,7 @@ create table client (
 
 create table industry (
   id int not null auto_increment primary key,
-  description not null varchar(50) unique);
+  description varchar(50) not null unique);
 
 insert into industry values(
   'Non-profit',
