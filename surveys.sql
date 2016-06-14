@@ -2,6 +2,7 @@ create table client (
   id bigint not null primary key,
   phone decimal(10) unique,
   email varchar(50) unique,
+  postal varchar(1000),
   name varchar(50));
 
 create table industry (
@@ -34,6 +35,7 @@ create table intake_survey (
   industry_interest int,
   other_industry varchar(50),
   current_resume boolean not null,
+  home_internet boolean not null,
   benefits_received set(
     'ga',
     'ssi',
