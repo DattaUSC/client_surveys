@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <!-- The CSS package above applies Google styling to buttons and other elements. -->
+    <style>
+      body {
+        margin: 5px;
+      }      
+      
+      #button-bar {
+        margin: 10px 0 0 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div>
+        <label for="server">
+          Http address of SQL server.
+        </label>
+        <input class="block" type="text" id="server">
+      </div>
+      <div>
+        <label for="username">
+          User name for data import.
+        </label>
+      <input class="block" type="username" id="username">
+      </div>
+      <div>
+      <label for="password">
+        Password.
+      </label>
+      <input class="block" type="password" id="password">
+      </div>
+      <div>
+      <label for="database">
+        Database name.
+      </label>
+      <input class="block" type="text" id="database">
+      </div>
+    </div>
+    <div id="button-bar">
+      <button id="save-settings">Save</button>
+    </div>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+    </script>
+    <script>
+      $(function() {
+        $('#save-settings').click(saveSettingsToServer);
+        google.script.run
+           .withSuccessHandler(loadSettings)
+           .withFailureHandler(showStatus)
+           .withUserObject($('#button-bar').get())
+           .getSettings();
+      });
+    
+      function saveSettingsToServer() {
+        this.disabled = true;
+        $('#status').remove();
+        var server = $('#server').val().trim();
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var database = $('#database').val();
+        var settings = {
+          'server': server,
+          'username': username,
+          'password': password,
+          'database': database,
+        };
+        
+        // Save the settings on the server
+        google.script.run
+            .withSuccessHandler(
+              function(msg, element) {
+                showStatus('Saved settings', $('#button-bar'));
+                element.disabled = false;
+              })
+            .withFailureHandler(
+              function(msg, element) {
+                showStatus(msg, $('#button-bar'));
+                element.disabled = false;
+              })
+            .withUserObject(this)
+            .saveSettings(settings);
+      }
+
+      function loadSettings(settings) {
+        $('#server').val(settings.server);
+        $('#username').val(settings.username);
+        $('#password').val(settings.password);
+        $('#database').val(settings.database);
+      }
+
+      function showStatus(msg, element) {
+        var div = $('<div>')
+             .attr('id', 'status')
+             .attr('class','error')
+             .text(msg);
+        $(element).after(div);
+      }
+    </script>
+  </body>
+</html>
